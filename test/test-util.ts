@@ -1,5 +1,6 @@
 import {prismaClient} from "../src/application/database";
 import bcrypt from "bcrypt";
+import {User} from "@prisma/client";
 
 export class UserTest {
 
@@ -11,15 +12,29 @@ export class UserTest {
         })
     }
 
-    static async create(){
+    static async create() {
         await prismaClient.user.create({
             data: {
                 username: "test",
-                name:"test",
+                name: "test",
                 password: await bcrypt.hash("test", 10),
                 token: "test"
             }
         })
+    }
+
+    static async get(): Promise<User> {
+        const user = await prismaClient.user.findFirst({
+            where: {
+                username: "test"
+            }
+        })
+
+        if (!user) {
+            throw new Error("User is not found");
+        }
+
+        return user;
     }
 
 }
