@@ -281,3 +281,40 @@ describe('DELETE /api/contacts/:contactId/addresses/:addressId', () => {
         expect(response.body.errors).toBeDefined();
     });
 });
+
+describe('GET /api/contacts/:contactId/addresses', () => {
+    beforeEach(async () => {
+        await UserTest.create();
+        await ContactTest.create();
+        await AddressTest.create();
+    })
+    afterEach(async () => {
+        await AddressTest.deleteAll();
+        await ContactTest.deleteAll();
+        await UserTest.delete();
+    })
+
+    it('should be able to list addresses', async () => {
+        const contact = await ContactTest.get();
+
+        const response = await supertest(web)
+            .get(`/api/contacts/${contact.id}/addresses`)
+            .set("X-API-TOKEN", "test");
+
+        logger.debug(response.body);
+        expect(response.status).toBe(200);
+        expect(response.body.data.length).toBe(1);
+    });
+
+    it('should reject list address if contact is not found', async () => {
+        const contact = await ContactTest.get();
+
+        const response = await supertest(web)
+            .get(`/api/contacts/${contact.id + 1}/addresses`)
+            .set("X-API-TOKEN", "test");
+
+        logger.debug(response.body);
+        expect(response.status).toBe(404);
+        expect(response.body.errors).toBeDefined();
+    });
+});
