@@ -49,9 +49,9 @@ export class ContactTest {
         })
     }
 
-    static async create(){
+    static async create() {
         await prismaClient.contact.create({
-            data:{
+            data: {
                 first_name: "test",
                 last_name: "test",
                 email: "test@example.com",
@@ -68,11 +68,25 @@ export class ContactTest {
             }
         });
 
-        if(!contact){
+        if (!contact) {
             throw new Error("Contact is not found");
         }
 
         return contact;
+    }
+
+}
+
+export class AddressTest {
+
+    static async deleteAll() {
+        await prismaClient.address.deleteMany({
+            where: {
+                contact: {
+                    username: "test"
+                }
+            }
+        })
     }
 
 }
