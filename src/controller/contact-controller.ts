@@ -47,4 +47,17 @@ export class ContactController {
         }
     }
 
+    static async remove(req: UserRequest, res: Response, next: NextFunction) {
+        try {
+            const contactId = Number(req.params.contactId);
+            const response = await ContactService.remove(req.user!, contactId);
+            logger.debug("response : " + JSON.stringify(response));
+            res.status(200).json({
+                data: "OK"
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
