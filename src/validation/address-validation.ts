@@ -16,6 +16,11 @@ export class AddressValidation {
         id: z.number().positive(),
     })
 
+    static readonly REMOVE : ZodType = z.object({
+        contact_id: z.number().positive(),
+        id: z.number().positive(),
+    })
+
     static readonly UPDATE : ZodType = z.object({
         id: z.number().positive(),
         contact_id: z.number().positive(),
